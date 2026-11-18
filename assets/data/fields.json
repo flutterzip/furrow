@@ -1,0 +1,167 @@
+[
+ {
+  "id": "north",
+  "name": "North Field",
+  "crop": "wheat",
+  "hectares": 12.4,
+  "plantedDaysAgo": 96,
+  "cycleDays": 120,
+  "moisture": 38,
+  "target": [
+   35,
+   55
+  ],
+  "irrigating": false,
+  "shape": [
+   [
+    0.06,
+    0.08
+   ],
+   [
+    0.52,
+    0.06
+   ],
+   [
+    0.5,
+    0.44
+   ],
+   [
+    0.08,
+    0.47
+   ]
+  ],
+  "rowAngle": 0.0
+ },
+ {
+  "id": "river",
+  "name": "River Plot",
+  "crop": "maize",
+  "hectares": 8.1,
+  "plantedDaysAgo": 54,
+  "cycleDays": 110,
+  "moisture": 61,
+  "target": [
+   50,
+   70
+  ],
+  "irrigating": true,
+  "shape": [
+   [
+    0.57,
+    0.06
+   ],
+   [
+    0.94,
+    0.1
+   ],
+   [
+    0.92,
+    0.42
+   ],
+   [
+    0.55,
+    0.4
+   ]
+  ],
+  "rowAngle": 1.57
+ },
+ {
+  "id": "glasshouse",
+  "name": "Glasshouse",
+  "crop": "tomato",
+  "hectares": 0.8,
+  "plantedDaysAgo": 71,
+  "cycleDays": 90,
+  "moisture": 66,
+  "target": [
+   60,
+   75
+  ],
+  "irrigating": false,
+  "shape": [
+   [
+    0.08,
+    0.53
+   ],
+   [
+    0.36,
+    0.52
+   ],
+   [
+    0.37,
+    0.92
+   ],
+   [
+    0.07,
+    0.93
+   ]
+  ],
+  "rowAngle": 1.57
+ },
+ {
+  "id": "garden",
+  "name": "Kitchen Garden",
+  "crop": "lettuce",
+  "hectares": 0.4,
+  "plantedDaysAgo": 22,
+  "cycleDays": 55,
+  "moisture": 29,
+  "target": [
+   45,
+   65
+  ],
+  "irrigating": false,
+  "shape": [
+   [
+    0.41,
+    0.5
+   ],
+   [
+    0.62,
+    0.49
+   ],
+   [
+    0.63,
+    0.92
+   ],
+   [
+    0.42,
+    0.93
+   ]
+  ],
+  "rowAngle": 0.0
+ },
+ {
+  "id": "south",
+  "name": "South Acres",
+  "crop": "soy",
+  "hectares": 15.2,
+  "plantedDaysAgo": 38,
+  "cycleDays": 100,
+  "moisture": 47,
+  "target": [
+   40,
+   60
+  ],
+  "irrigating": false,
+  "shape": [
+   [
+    0.68,
+    0.47
+   ],
+   [
+    0.93,
+    0.48
+   ],
+   [
+    0.94,
+    0.93
+   ],
+   [
+    0.67,
+    0.92
+   ]
+  ],
+  "rowAngle": 0.6
+ }
+]

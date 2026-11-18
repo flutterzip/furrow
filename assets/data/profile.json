@@ -1,0 +1,42 @@
+{
+ "name": "Olympicson",
+ "farm": "Olympicson Farm",
+ "avatar": "asset:people/olympicson.png",
+ "tasks": [
+  {
+   "id": "t1",
+   "title": "Irrigate the Kitchen Garden",
+   "field": "garden",
+   "dueDays": 0,
+   "done": false
+  },
+  {
+   "id": "t2",
+   "title": "Check the wheat for rust",
+   "field": "north",
+   "dueDays": 0,
+   "done": false
+  },
+  {
+   "id": "t3",
+   "title": "Tie up tomato vines",
+   "field": "glasshouse",
+   "dueDays": 1,
+   "done": false
+  },
+  {
+   "id": "t4",
+   "title": "Service the river pump",
+   "field": "river",
+   "dueDays": 2,
+   "done": false
+  },
+  {
+   "id": "t5",
+   "title": "Soil sample, South Acres",
+   "field": "south",
+   "dueDays": -1,
+   "done": true
+  }
+ ]
+}
