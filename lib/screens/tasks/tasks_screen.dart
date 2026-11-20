@@ -16,6 +16,9 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
   final title = TextEditingController();
   String? fieldId;
 
+  /// The field the last task went to, shown until the next one is started.
+  String? addedTo;
+
   String due(DateTime d) {
     final days = dateOnly(d).difference(dateOnly(ref.read(clockProvider)())).inDays;
     return switch (days) { < 0 => 'Overdue', 0 => 'Today', 1 => 'Tomorrow', _ => weekday(d) };
@@ -36,7 +39,10 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
     if (title.text.trim().isEmpty || fieldId == null) return;
     ref.read(tasksProvider.notifier).add(title.text, fieldId!, ref.read(clockProvider)());
     title.clear();
-    setState(() => fieldId = null);
+    setState(() {
+      addedTo = fieldId;
+      fieldId = null;
+    });
     FocusScope.of(context).unfocus();
   }
 
@@ -64,7 +70,9 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
               TextField(
                 controller: title,
                 textCapitalization: TextCapitalization.sentences,
-                onChanged: (_) => setState(() {}),
+                onChanged: (v) => setState(() {
+                  if (v.isNotEmpty) addedTo = null;
+                }),
                 onSubmitted: (_) => add(),
                 style: text.bodyLarge!.copyWith(color: p.ink),
                 decoration: InputDecoration(
@@ -79,13 +87,43 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
                 values: [for (final f in seed.fields) f.id],
                 value: fieldId ?? '',
                 label: (id) => seed.field(id).name,
-                onChanged: (id) => setState(() => fieldId = id),
+                onChanged: (id) => setState(() {
+                  fieldId = id;
+                  addedTo = null;
+                }),
               ),
               const SizedBox(height: 12),
-              FurrowButton(
-                label: fieldId == null ? 'Pick a field to add it' : 'Add task',
-                icon: Icons.add_rounded,
-                onPressed: title.text.trim().isEmpty || fieldId == null ? null : add,
+              // Adding breaks the button into fragments that fly together as
+              // the note of where the task went.
+              ParticleMorph(
+                child: addedTo != null
+                    ? Container(
+                        key: const ValueKey('added'),
+                        height: Tokens.buttonHeight,
+                        decoration: BoxDecoration(color: p.accentWash, borderRadius: BorderRadius.circular(Tokens.buttonRadius)),
+                        alignment: Alignment.center,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.check_circle_rounded, size: 20, color: p.accentDeep),
+                            const SizedBox(width: 8),
+                            Flexible(
+                              child: Text(
+                                'Added to ${seed.field(addedTo!).name}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: text.labelLarge!.copyWith(color: p.accentDeep),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : FurrowButton(
+                        key: const ValueKey('add'),
+                        label: fieldId == null ? 'Pick a field to add it' : 'Add task',
+                        icon: Icons.add_rounded,
+                        onPressed: title.text.trim().isEmpty || fieldId == null ? null : add,
+                      ),
               ),
             ],
           ),

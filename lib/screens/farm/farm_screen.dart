@@ -16,6 +16,15 @@ class FarmScreen extends ConsumerStatefulWidget {
 class _FarmScreenState extends ConsumerState<FarmScreen> {
   String? chosen;
 
+  /// Fields whose valve is opening.
+  final opening = <String>{};
+
+  Future<void> turnOn(Field f) async {
+    setState(() => opening.add(f.id));
+    await ref.read(waterProvider.notifier).set(f.id, true);
+    if (mounted) setState(() => opening.remove(f.id));
+  }
+
   void open(Field field) {
     setState(() => chosen = field.id);
     context.open(FieldScreen(field: field));
@@ -71,13 +80,20 @@ class _FarmScreenState extends ConsumerState<FarmScreen> {
             SectionTitle(thirsty.isEmpty ? 'Every field' : 'Needs water'),
             for (final f in [...thirsty, ...seed.fields.where((f) => !thirsty.contains(f))])
               FieldRow(
+                key: ValueKey(f.id),
                 field: f,
                 moisture: moisture(f),
                 onTap: () => open(f),
-                trailing: thirsty.contains(f) && !watering.contains(f.id)
+                // Turning the water on is the farm's small win: the button
+                // breaks apart and flies together as the running sprinkler.
+                trailing: thirsty.contains(f)
                     ? SizedBox(
                         width: 112,
-                        child: FurrowButton(label: 'Water', icon: Icons.water_drop_rounded, onPressed: () => ref.read(waterProvider.notifier).set(f.id, true)),
+                        child: ParticleMorph(
+                          child: watering.contains(f.id)
+                              ? _Watering(key: ValueKey('on-${f.id}'))
+                              : FurrowButton(key: ValueKey('water-${f.id}'), label: 'Water', icon: Icons.water_drop_rounded, busy: opening.contains(f.id), onPressed: () => turnOn(f)),
+                        ),
                       )
                     : null,
               ),
@@ -85,6 +101,36 @@ class _FarmScreenState extends ConsumerState<FarmScreen> {
           ],
         ),
       ],
+    );
+  }
+}
+
+/// Where the Water button was, once the sprinkler is running.
+class _Watering extends StatelessWidget {
+  const _Watering({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    return Container(
+      height: Tokens.buttonHeight,
+      decoration: BoxDecoration(color: p.accentWash, borderRadius: BorderRadius.circular(Tokens.buttonRadius)),
+      alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.water_drop_rounded, size: 16, color: p.accentDeep),
+            const SizedBox(width: 6),
+            Text(
+              'Watering',
+              style: Theme.of(context).textTheme.labelMedium!.copyWith(color: p.accentDeep, fontWeight: FontWeight.w700),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

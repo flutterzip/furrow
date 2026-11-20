@@ -27,6 +27,7 @@ void main() {
       await tester.tap(find.text('Water'));
       await tester.pumpAndSettle();
       expect(c.read(waterProvider)['garden']!.on, isTrue);
+      expect(find.text('Watering'), findsOneWidget);
     });
 
     testWidgets('tapping a field on the map opens it', (tester) async {
@@ -95,6 +96,10 @@ void main() {
       await tester.tap(find.text('Add task'));
       await tester.pumpAndSettle();
       expect(c.read(tasksProvider).any((t) => t.title == 'Fix the fence' && t.fieldId == 'river'), isTrue);
+      expect(find.text('Added to River Plot'), findsOneWidget);
+      await tester.enterText(find.byType(TextField), 'Mend the gate');
+      await tester.pump();
+      expect(find.text('Pick a field to add it'), findsOneWidget);
     });
 
     testWidgets('swipe to delete, with undo', (tester) async {
